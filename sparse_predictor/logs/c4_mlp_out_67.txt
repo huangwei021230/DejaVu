@@ -1,0 +1,3 @@
+Namespace(model='66b', dataset='c4', L=67, D=1000, batch_size=1024, epochs=20, lr=0.001)
+======================================== Layer 67 ========================================
+Reading query from ../data/66b_c4/mlp_x_67.mmap
