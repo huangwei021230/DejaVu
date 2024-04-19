@@ -424,6 +424,8 @@ class DistGreedyInferenceMaskTokenPipeSync(DistGreedyInferenceTokePipeSync):
         print("Compute prompt seq<", index, ">.")
         if self.pp_rank == 0:
             self.input_seq_emb[index] = self.layers["emb"](seq, mask=mask)
+
+
         current_emb = self.input_seq_emb[index]
         caches = [None] * self.num_layers
         previous_emb = None
@@ -482,14 +484,23 @@ class DistGreedyInferenceMaskTokenPipeSync(DistGreedyInferenceTokePipeSync):
         indices = indices[:, 1:]  # skip first
 
         logprobs = torch.gather(z, -1, indices.unsqueeze(-1)).squeeze(-1)
+
+        print("self.i_current_token: ", self.i_current_token)
+        print("self.ret_tokens_shape: ", self.ret_tokens.shape)
+        print("self.micro_batch_size: ", self.micro_batch_size)
+        print("index: ", index)
+        print("original_indices: ", original_indices.shape)
+
         self.ret_tokens[
             index * self.micro_batch_size : (index + 1) * self.micro_batch_size,
             : self.i_current_token,
         ] = original_indices
+
         self.ret_token_logprobs[
             index * self.micro_batch_size : (index + 1) * self.micro_batch_size,
             1 : self.i_current_token,
         ] = logprobs
+
         if self.top_k_per_token > 0:
             logprobs, indices = z.topk(k=self.top_k_per_token, dim=-1)
             self.ret_topk_tokens[
@@ -626,9 +637,12 @@ class DistGreedyInferenceMaskTokenPipeSync(DistGreedyInferenceTokePipeSync):
         return attention_mask
 
     def forward_seq_pipeline_stage(self, input_data=None, attention_mask=None):
+        print("input_data: ", input_data.shape)
+
         if self.pp_rank == 0 or self.pp_rank == self.pipeline_group_size - 1:
             assert input_data is not None
             if self.pp_rank == 0 and self.generate_seq_length == 0:
+                # TODO: why should reduce 1 for first node?
                 # input reduce 1 for first node
                 input_data = input_data[:, :-1]
 
@@ -636,6 +650,8 @@ class DistGreedyInferenceMaskTokenPipeSync(DistGreedyInferenceTokePipeSync):
             input_seqs = torch.chunk(input_data, self.seq_num, dim=0)
         else:
             input_seqs = [None] * self.seq_num
+
+
 
         if attention_mask is not None:
             if self.generate_seq_length == 0:

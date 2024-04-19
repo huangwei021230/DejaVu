@@ -24,7 +24,7 @@ for idx, doc in enumerate(tqdm(dataset)):
         "echo": True,
         "logprobs": 1,
         "max_tokens": 0,
-        "model": "opt-175b",
+        "model": "opt-125m",
         "n": 1,
         "prompt": doc["text"],
         "request_type": "language-model-inference",

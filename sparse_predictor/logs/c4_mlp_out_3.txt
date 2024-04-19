@@ -1,3 +1,3 @@
-Namespace(model='66b', dataset='c4', L=3, D=1000, batch_size=1024, epochs=20, lr=0.001)
+Namespace(D=1000, L=3, batch_size=1024, dataset='c4', epochs=20, lr=0.001, model='66b')
 ======================================== Layer 3 ========================================
 Reading query from ../data/66b_c4/mlp_x_3.mmap

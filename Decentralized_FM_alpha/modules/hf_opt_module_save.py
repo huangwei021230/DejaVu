@@ -416,8 +416,47 @@ class GPTBlock(OPTDecoderLayer):
         module.layer_index = layer_index
         module.self_attn.layer_index = layer_index
         module.fp_i = 0
+        # module.fp_mlp_query = np.memmap(
+        #     f"/lustre/fsw/nvresearch/ldm/diffusion/data/175b_c4/mlp_sp_x_{module.layer_index}.mmap",
+        #     dtype="float16",
+        #     mode="w+",
+        #     shape=(
+        #         400000,
+        #         config.hidden_size,
+        #     ),
+        # )
+        # module.fp_att_query = np.memmap(
+        #     f"/lustre/fsw/nvresearch/ldm/diffusion/data/175b_c4/att_sp_x_{module.layer_index}.mmap",
+        #     dtype="float16",
+        #     mode="w+",
+        #     shape=(
+        #         400000,
+        #         config.hidden_size,
+        #     ),
+        # )
+        # module.fp_label = np.memmap(
+        #     f"/lustre/fsw/nvresearch/ldm/diffusion/visualization/175b/mlp_label_{module.layer_index}.mmap",
+        #     dtype="float16",
+        #     mode="w+",
+        #     shape=(
+        #         400000,
+        #         config.hidden_size * 4,
+        #     ),
+        # )
+        # module.self_attn.fp_i = 0
+        # module.self_attn.fp_label = np.memmap(
+        #     f"/lustre/fsw/nvresearch/ldm/diffusion/visualization/175b/score_norm_{module.layer_index}.mmap",
+        #     dtype="float16",
+        #     mode="w+",
+        #     shape=(
+        #         400000,
+        #         config.num_attention_heads,
+        #     ),
+        # )
+
+
         module.fp_mlp_query = np.memmap(
-            f"/lustre/fsw/nvresearch/ldm/diffusion/data/175b_c4/mlp_sp_x_{module.layer_index}.mmap",
+            f"/home/boogiepop/ipads/Dejavu/DejaVu/data/125m_c4/mlp_sp_x_{module.layer_index}.mmap",
             dtype="float16",
             mode="w+",
             shape=(
@@ -426,7 +465,7 @@ class GPTBlock(OPTDecoderLayer):
             ),
         )
         module.fp_att_query = np.memmap(
-            f"/lustre/fsw/nvresearch/ldm/diffusion/data/175b_c4/att_sp_x_{module.layer_index}.mmap",
+            f"/home/boogiepop/ipads/Dejavu/DejaVu/data/125m_c4/att_sp_x_{module.layer_index}.mmap",
             dtype="float16",
             mode="w+",
             shape=(
@@ -435,7 +474,7 @@ class GPTBlock(OPTDecoderLayer):
             ),
         )
         module.fp_label = np.memmap(
-            f"/lustre/fsw/nvresearch/ldm/diffusion/visualization/175b/mlp_label_{module.layer_index}.mmap",
+            f"/home/boogiepop/ipads/Dejavu/DejaVu/visualization/125m/mlp_label_{module.layer_index}.mmap",
             dtype="float16",
             mode="w+",
             shape=(
@@ -445,7 +484,7 @@ class GPTBlock(OPTDecoderLayer):
         )
         module.self_attn.fp_i = 0
         module.self_attn.fp_label = np.memmap(
-            f"/lustre/fsw/nvresearch/ldm/diffusion/visualization/175b/score_norm_{module.layer_index}.mmap",
+            f"/home/boogiepop/ipads/Dejavu/DejaVu/visualization/125m/score_norm_{module.layer_index}.mmap",
             dtype="float16",
             mode="w+",
             shape=(
@@ -453,7 +492,6 @@ class GPTBlock(OPTDecoderLayer):
                 config.num_attention_heads,
             ),
         )
-
         return module
 
     def forward(self, x: torch.Tensor, layer_past=None, mask=None) -> torch.Tensor:

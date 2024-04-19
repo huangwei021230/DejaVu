@@ -1,4 +1,6 @@
 import json
+
+import torch
 from comm.comm_utils import *
 from comm.hybrid_comm_utils import *
 
@@ -6,6 +8,7 @@ from task_datasets.inference_data import get_tokenizer
 from flask import Flask, request
 import threading
 from coordinator.http_coordinate_client import CoordinatorInferenceHTTPClient
+
 
 
 def distributed_inference_foo_iter(args, pipeline, device, request_processor,

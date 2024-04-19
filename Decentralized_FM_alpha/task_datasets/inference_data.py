@@ -338,7 +338,6 @@ class RequestProcessor:
         self.tokenizer.model_max_length = args.input_seq_length
 
         print("input seq length:", args.input_seq_length)
-
     def get_dataloader(self, batch_size, num_workers=0):
         dataset = JsonDataset(
             [x["request"]["prompt"] for x in self.data],
